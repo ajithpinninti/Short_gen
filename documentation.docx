@@ -1,0 +1,94 @@
+Create a virtual environment and install the required packages using the following commands:
+python -m venv venv
+# On Windows: venv\Scripts\activate
+# mac and ubuntu:  source venv/bin/activate  
+
+pip install -r requirements.txt
+
+activate the virtual environment
+/ven/Scripts/activate
+installing requirements
+# Uses the pip for the current Python interpreter
+pip install openai-whisper moviepy==2.1.1 Pillow
+
+Steps to Install ffmpeg on Windows:
+    [https://ffmpeg.org/download.html#build-windows
+    Download ffmpeg:https://ffmpeg.org/download.html 7.1tar.xz
+    \
+    Go to the ffmpeg download page.
+    Download the latest release for Windows.
+    use choco to install:-
+        choco install ffmpeg-full
+        choco install ffmpeg
+
+
+
+refer:-
+https://github.com/ramsrigouthamg/Supertranslate.ai/blob/main/Scrolling_Subtitles_On_Video_using_Python/Scrolling_Subtitles_On_Video_using_Python.ipynb 
+
+
+How to run:-
+
+python main.py --images ./images --script script.txt --audio voiceover.mp3 --output final_video.mp4 --sub_pos 60
+
+test:-
+ python main.py --images "Test_data\images" --script "Test_data\dronacharya killed\Script\script.txt" --audio "Test_data\dronacharya killed\audio\script.mp3" --output "final_video.mp4" --sub_pos 60
+ (or)
+ modify launch.json with testing code.
+ {
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Run main.py with args",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/main.py", 
+            "console": "integratedTerminal",
+            "justMyCode": false,
+            "args": [
+                "--images", "Test_data/images",
+                "--script", "Test_data/dronacharya killed/Script/script.txt",
+                "--audio", "Test_data/dronacharya killed/audio/script.mp3",
+                "--output", "final_video.mp4",
+                "--sub_pos", "30"
+            ]
+        }
+    ]
+}
+
+
+ launch.json update with testing code.
+
+Notes:
+
+Images should be named numerically (1.jpg, 2.png, etc.)
+
+Script should have one sentence per line with fullstop,
+for every line of sentence in script, there should be corresponding image in images folder.
+image will trasntioned per sentence
+
+Audio format support includes MP3, WAV, OGG, etc.
+
+Outputs H.264 video with AAC audio for broad compatibility
+
+Subtitle position is calculated from top of screen (60 = 60% from top)  
+
+
+
+Key Features:
+
+Modular architecture with separate components for audio/video processing
+
+Whisper AI integration for accurate speech-to-text
+
+Dynamic word-level subtitle animation
+
+Image sequencing based on script structure
+
+Configurable subtitle positioning
+
+Input validation and error checking
+
+9:16 aspect ratio support
+
+Cross-format compatibility for audio/image files
