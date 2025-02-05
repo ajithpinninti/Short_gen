@@ -128,6 +128,6 @@ def process_audio(audio_path, script_path):
     aligned_data = align_script_with_audio(script_path, audio_segments)
     print("audio process is completed")
     return {
-        'raw_audio': AudioFileClip(audio_path),
+        'raw_audio_path': audio_path,
         'aligned_data': aligned_data
     }

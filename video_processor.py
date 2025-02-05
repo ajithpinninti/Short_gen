@@ -3,8 +3,10 @@
 #############################
 from moviepy.video.VideoClip import ImageClip, TextClip
 from moviepy.video.compositing.CompositeVideoClip import CompositeVideoClip
+from moviepy.audio.io.AudioFileClip import AudioFileClip
 from moviepy.video.compositing.CompositeVideoClip import concatenate_videoclips
 import os
+import subprocess
 
 def create_image_clips(image_dir, aligned_data):
     """Create image clips with proper sequencing and duration"""
@@ -67,17 +69,25 @@ def create_subtitles(aligned_data, sub_position):
     
     return subtitle_clips
 
-def process_video(image_dir, script_path, audio_data, output_path, sub_position):
-    """Main video processing function"""
+def process_video(image_dir, script_path, audio_data, output_path, sub_position,playback_speed):
+    """Main video processing function
+    playback_speed: Speedup factor for the final video 0.0 to 2.0
+    """
     video_clip = create_image_clips(image_dir, audio_data['aligned_data'])
     # video_clip.preview(fps=24)
     subtitles = create_subtitles(audio_data['aligned_data'], sub_position)
     
     final_video = CompositeVideoClip([video_clip] + subtitles)
     # final_video.preview(fps=24)
-    final_video = final_video.with_audio(audio_data['raw_audio'])
-    # final_video.preview(fps=24)
+    temp_audio = "temp_speedup_audio.mp3" # Temporary audio file for speedup
     
+    speedup_command = [
+        "ffmpeg", "-i", audio_data['raw_audio_path'], "-filter:a", f"atempo={playback_speed}", "-vn", temp_audio
+    ]
+    subprocess.run(speedup_command, check=True)
+    final_video = final_video.with_speed_scaled(playback_speed)
+    final_video = final_video.with_audio(AudioFileClip(temp_audio))
+
     final_video.write_videofile(
         output_path,
         codec='libx264',
@@ -86,5 +96,6 @@ def process_video(image_dir, script_path, audio_data, output_path, sub_position)
         threads=4,
         preset='fast'
     )
+    os.remove(temp_audio) # Remove temporary audio file
 
 

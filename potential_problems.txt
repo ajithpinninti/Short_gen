@@ -10,4 +10,5 @@ need to check how to increase the box size to add subtitles as overlay
 Note:-
 match number of words in script and  words detected remove all the annotation in both
 based on that seperate the sentece timing of the image.
-
+audio need to speedup without decreasing the quality, or video directly 
+without decreasing the quality if finding the words become problem with whsiper

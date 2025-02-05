@@ -8,8 +8,19 @@ pip install -r requirements.txt
 activate the virtual environment
 /ven/Scripts/activate
 installing requirements
+pip install -r requirements.txt
+
 # Uses the pip for the current Python interpreter
 pip install openai-whisper moviepy==2.1.1 Pillow
+
+Install ffmpeg and sox on your system using the following commands:
+
+# On Windows
+if scoop is not installed,
+run powershell as administartor and install scoop with below command
+>> iex "& {$(irm get.scoop.sh)} -RunAsAdmin"
+>> scoop install sox
+
 
 Steps to Install ffmpeg on Windows:
     [https://ffmpeg.org/download.html#build-windows
@@ -29,7 +40,12 @@ https://github.com/ramsrigouthamg/Supertranslate.ai/blob/main/Scrolling_Subtitle
 
 How to run:-
 
-python main.py --images ./images --script script.txt --audio voiceover.mp3 --output final_video.mp4 --sub_pos 60
+python main.py --images ./images --script script.txt --audio voiceover.mp3 --output final_video.mp4 --sub_pos center
+--image = image relative path
+--script = script relative path
+--audio = script voice over relative path
+--output = output video relative path
+--sub_pos = subtitle position (center, top, bottom)
 
 test:-
  python main.py --images "Test_data\images" --script "Test_data\dronacharya killed\Script\script.txt" --audio "Test_data\dronacharya killed\audio\script.mp3" --output "final_video.mp4" --sub_pos 60
@@ -50,7 +66,7 @@ test:-
                 "--script", "Test_data/dronacharya killed/Script/script.txt",
                 "--audio", "Test_data/dronacharya killed/audio/script.mp3",
                 "--output", "final_video.mp4",
-                "--sub_pos", "30"
+                "--sub_pos", "center"
             ]
         }
     ]
