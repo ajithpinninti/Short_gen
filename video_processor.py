@@ -73,13 +73,17 @@ def process_video(image_dir, script_path, audio_data, output_path, sub_position,
     """Main video processing function
     playback_speed: Speedup factor for the final video 0.0 to 2.0
     """
+    temp_audio = "temp_speedup_audio.mp3" # Temporary audio file for speedup
+    if os.path.exists(temp_audio):
+        os.remove(temp_audio)
+    
     video_clip = create_image_clips(image_dir, audio_data['aligned_data'])
     # video_clip.preview(fps=24)
     subtitles = create_subtitles(audio_data['aligned_data'], sub_position)
     
     final_video = CompositeVideoClip([video_clip] + subtitles)
     # final_video.preview(fps=24)
-    temp_audio = "temp_speedup_audio.mp3" # Temporary audio file for speedup
+    
     
     speedup_command = [
         "ffmpeg", "-i", audio_data['raw_audio_path'], "-filter:a", f"atempo={playback_speed}", "-vn", temp_audio

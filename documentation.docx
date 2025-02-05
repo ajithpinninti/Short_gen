@@ -13,15 +13,17 @@ pip install -r requirements.txt
 # Uses the pip for the current Python interpreter
 pip install openai-whisper moviepy==2.1.1 Pillow
 
-Install ffmpeg and sox on your system using the following commands:
+Install ffmpeg system using the following commands:
 
 # On Windows
+use scoop or chocolatey to install ffmpeg
+
 if scoop is not installed,
 run powershell as administartor and install scoop with below command
 >> iex "& {$(irm get.scoop.sh)} -RunAsAdmin"
->> scoop install sox
+>> scoop install ffmpeg  
 
-
+with chocolatey
 Steps to Install ffmpeg on Windows:
     [https://ffmpeg.org/download.html#build-windows
     Download ffmpeg:https://ffmpeg.org/download.html 7.1tar.xz

@@ -12,7 +12,8 @@ def main():
     parser.add_argument('--script', type=str, required=True, help='Path to script file')
     parser.add_argument('--audio', type=str, required=True, help='Path to audio file')
     parser.add_argument('--output', type=str, default='output.mp4', help='Output file path')
-    parser.add_argument('--sub_pos', type=str, default=50, help='Subtitle vertical position percentage')
+    parser.add_argument('--sub_pos', type=str, default="center", help='Subtitle vertical position percentage')
+    parser.add_argument('--pbspeed', type=float, default=1.0, help='Playback speed factor')
     
     print("looking into arguments")
     args = parser.parse_args()
@@ -27,7 +28,7 @@ def main():
 
     processed_audio = process_audio(args.audio, args.script)
     process_video(args.images, args.script, processed_audio,
-                 args.output, args.sub_pos,1.5)
+                 args.output, args.sub_pos,args.pbspeed)
 
 
 if __name__ == "__main__":
