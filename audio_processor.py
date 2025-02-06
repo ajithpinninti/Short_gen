@@ -25,13 +25,17 @@ def transcribe_with_timestamps(audio_path):
             result = pickle.load(f)
     else:
         print("Processing audio and caching the result...")
-        model = whisper.load_model("medium")
+        model = whisper.load_model("medium") #large-v1
+        #['tiny.en', 'tiny', 'base.en', 'base', 'small.en', 'small',
+        # 'medium.en', 'medium', 'large-v1', 'large-v2', 'large-v3', 'large',
+        #  'large-v3-turbo', 'turbo']
         result = model.transcribe(audio_path, fp16=False, word_timestamps=True)
 
     # Save to cache
     with open(CACHE_FILE, "wb") as f:
         pickle.dump(result, f)
-    ###############################################################       
+    ###############################################################   
+    print(result['text'])
     return result["segments"]
 
 def align_script_with_audio(script_path, audio_segments):
@@ -68,10 +72,10 @@ def align_script_with_audio(script_path, audio_segments):
     script["script_line_words"] = []
     script["script_all_words"] = []
     for text in script_lines:
-        text = re.sub(r'[^a-zA-Z\s]', '', text) #removing all special characters
-        script["script_all_words"] += re.findall(r"\b\w+(?:'\w+)?\b", text)
-        script["script_line_words"].append(re.findall(r"\b\w+(?:'\w+)?\b", text))
-        # todo: change the text in evry word object in segment ( later)
+        # text = re.sub(r'[^a-zA-Z\s]', '', text) #removing all special characters
+        script["script_all_words"] += re.findall(r"\b\w+(?:'\w+)?\b", text.replace('-', ' '))
+        script["script_line_words"].append(re.findall(r"\b\w+(?:'\w+)?\b", text.replace('-', ' ')))
+        # todo: change the text in every word object in segment ( later)
 
     # checking the number of audio_words and script_lines words
     if ( len(audio_words) == len( script['script_all_words']) ):
@@ -98,6 +102,8 @@ def align_script_with_audio(script_path, audio_segments):
 
     else:
         print("#########Number of words in audio and script are not equal#########3")
+        print("Number of words in audio: ", len(audio_words))
+        print("Number of words in script: ", len(script['script_all_words']))
         return
 
     aligned_data = []

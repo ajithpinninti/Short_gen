@@ -7,10 +7,13 @@ from moviepy.audio.io.AudioFileClip import AudioFileClip
 def validate_inputs(image_dir, script_path, audio_path):
     """Validate input files existence and format"""
     if not os.path.isdir(image_dir):
+        print("Image directory not found")
         return False
     if not os.path.isfile(script_path):
+        print("Script file not found")
         return False
     if not os.path.isfile(audio_path):
+        print("Audio file not found")
         return False
     return True
 

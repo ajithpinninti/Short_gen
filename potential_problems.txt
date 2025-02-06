@@ -8,6 +8,8 @@ need to check how to increase the box size to add subtitles as overlay
 
 
 Note:-
+if folder contains anything other than images ignore those
+
 match number of words in script and  words detected remove all the annotation in both
 based on that seperate the sentece timing of the image.
 audio need to speedup without decreasing the quality, or video directly 
