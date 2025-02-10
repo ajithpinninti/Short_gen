@@ -1,0 +1,46 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+    "name": "Run main.py with args",
+    "type": "debugpy",
+    "request": "launch",
+    "program": "${workspaceFolder}/src/main.py",
+    "console": "integratedTerminal",
+    "justMyCode": false,
+    "args": [
+        "--images", "C:/Users/ajitp/OneDrive/Documents/Youtube/eecho tales/shorts/Ekalavya_learning/images",
+        "--script", "C:/Users/ajitp/OneDrive/Documents/Youtube/eecho tales/shorts/Ekalavya_learning/script.txt",
+        "--audio",  "C:/Users/ajitp/OneDrive/Documents/Youtube/eecho tales/shorts/Ekalavya_learning/audio/script.mp3",
+        "--output", "C:/Users/ajitp/OneDrive/Documents/Youtube/eecho tales/shorts/Ekalavya_learning/final_video.mp4",
+        "--sub_pos", "center",
+        "--pbspeed", "1.25"
+    ]
+}
+        // {
+        //     "name": "Run Tests",
+        //     "type": "debugpy",
+        //     "request": "launch",
+        //     "program": "${workspaceFolder}/Tests/audio_process_test.py",
+        //     "console": "integratedTerminal",
+        //     "justMyCode": false
+        // }
+    ]
+}
+
+// {
+//     "name": "Run main.py with args",
+//     "type": "debugpy",
+//     "request": "launch",
+//     "program": "${workspaceFolder}/main.py",
+//     "console": "integratedTerminal",
+//     "justMyCode": false,
+//     "args": [
+//         "--images", "C:/Users/ajitp/OneDrive/Documents/Youtube/eecho tales/shorts/Ekalavya_learning/images",
+//         "--script", "C:/Users/ajitp/OneDrive/Documents/Youtube/eecho tales/shorts/Ekalavya_learning/script.txt",
+//         "--audio",  "C:/Users/ajitp/OneDrive/Documents/Youtube/eecho tales/shorts/Ekalavya_learning/audio/script.mp3",
+//         "--output", "C:/Users/ajitp/OneDrive/Documents/Youtube/eecho tales/shorts/Ekalavya_learning/final_video.mp4",
+//         "--sub_pos", "center",
+//         "--pbspeed", "1.25"
+//     ]
+// }
