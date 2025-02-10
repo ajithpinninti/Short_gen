@@ -49,7 +49,7 @@ def create_image_clips(image_dir, aligned_data):
 def create_subtitles(aligned_data, sub_position):
     """Generate animated word-level subtitles"""
     subtitle_clips = []
-    font_name = r"fonts\Arial.otf"
+    font_name = r"fonts/Arial.otf"
     for segment in aligned_data:
         words = segment['words']
         
@@ -73,7 +73,9 @@ def process_video(image_dir, script_path, audio_data, output_path, sub_position,
     """Main video processing function
     playback_speed: Speedup factor for the final video 0.0 to 2.0
     """
-    temp_audio = "temp_speedup_audio.mp3" # Temporary audio file for speedup
+    sub_position = int(sub_position)
+    print(playback_speed, "\n\n\n")
+    temp_audio = "temp/speedup_audio.mp3" # Temporary audio file for speedup
     if os.path.exists(temp_audio):
         os.remove(temp_audio)
     

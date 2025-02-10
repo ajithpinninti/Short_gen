@@ -7,33 +7,31 @@ from moviepy.audio.io.AudioFileClip import AudioFileClip
 from utils import time_to_seconds
 import re
 import pickle
-CACHE_FILE = "processed_result_cache.pkl"
+CACHE_FILE = "temp/processed_result_cache.pkl"
 
 
 
-def transcribe_with_timestamps(audio_path):
+def transcribe_with_timestamps(audio_path, train):
     """Convert audio to text with word-level timestamps using Whisper"""
-    print("loading speech to text model ....    ")
-    #model = whisper.load_model("medium")
-    print("speech to text model running ....    ")
-
     ####################Cache the processed audio####################
     # Check if cached audio exists
-    if os.path.exists(CACHE_FILE):
+    if os.path.exists(CACHE_FILE) and not train:
         print("Loading cached processed_audio...")
         with open(CACHE_FILE, "rb") as f:
             result = pickle.load(f)
     else:
+        if os.path.exists(CACHE_FILE):
+            os.remove(CACHE_FILE)
+
+        print("loading speech to text model ....    ")
+        model = whisper.load_model("medium", device="cpu")
         print("Processing audio and caching the result...")
-        model = whisper.load_model("medium") #large-v1
-        #['tiny.en', 'tiny', 'base.en', 'base', 'small.en', 'small',
-        # 'medium.en', 'medium', 'large-v1', 'large-v2', 'large-v3', 'large',
-        #  'large-v3-turbo', 'turbo']
         result = model.transcribe(audio_path, fp16=False, word_timestamps=True)
 
     # Save to cache
     with open(CACHE_FILE, "wb") as f:
         pickle.dump(result, f)
+
     ###############################################################   
     return result["segments"]
 
@@ -130,10 +128,10 @@ def align_script_with_audio(script_path, audio_segments):
     
     return aligned_data
 
-def process_audio(audio_path, script_path):
+def process_audio(audio_path, script_path, train):
     """Main audio processing function"""
     print("Processing audio...")
-    audio_segments = transcribe_with_timestamps(audio_path)
+    audio_segments = transcribe_with_timestamps(audio_path, train)
     aligned_data = align_script_with_audio(script_path, audio_segments)
     print("audio process is completed")
     return {
