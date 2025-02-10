@@ -35,7 +35,6 @@ def transcribe_with_timestamps(audio_path):
     with open(CACHE_FILE, "wb") as f:
         pickle.dump(result, f)
     ###############################################################   
-    print(result['text'])
     return result["segments"]
 
 def align_script_with_audio(script_path, audio_segments):
@@ -73,8 +72,9 @@ def align_script_with_audio(script_path, audio_segments):
     script["script_all_words"] = []
     for text in script_lines:
         # text = re.sub(r'[^a-zA-Z\s]', '', text) #removing all special characters
-        script["script_all_words"] += re.findall(r"\b\w+(?:'\w+)?\b", text.replace('-', ' '))
-        script["script_line_words"].append(re.findall(r"\b\w+(?:'\w+)?\b", text.replace('-', ' ')))
+        script_words = re.findall(r"\b[\w]+(?:'[\w]+)?\b", text)
+        script["script_all_words"] += script_words
+        script["script_line_words"].append(script_words)
         # todo: change the text in every word object in segment ( later)
 
     # checking the number of audio_words and script_lines words
@@ -103,7 +103,10 @@ def align_script_with_audio(script_path, audio_segments):
     else:
         print("#########Number of words in audio and script are not equal#########3")
         print("Number of words in audio: ", len(audio_words))
+        for segment in audio_segments:
+            print(segment['text'])
         print("Number of words in script: ", len(script['script_all_words']))
+        print(script['script_all_words'])
         return
 
     aligned_data = []
