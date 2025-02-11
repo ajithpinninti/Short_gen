@@ -65,9 +65,14 @@ The tool requires `ffmpeg` for video processing. To install ffmpeg on Windows, f
 2. **Using Chocolatey:**
    - If you have [snap](https://https://snapcraft.io/) installed, open an administrative command prompt and run:
 
+    ```bash
+     sudo snap install ffmpeg 
+     ```
+              or
      ```bash
      sudo snap install ffmpeg
      ```
+     
 
 ## How to Run
 

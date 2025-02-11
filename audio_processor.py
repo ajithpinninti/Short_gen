@@ -29,6 +29,7 @@ def transcribe_with_timestamps(audio_path, train):
         result = model.transcribe(audio_path, fp16=False, word_timestamps=True)
 
     # Save to cache
+    os.makedirs(os.path.dirname(CACHE_FILE), exist_ok=True)
     with open(CACHE_FILE, "wb") as f:
         pickle.dump(result, f)
 
