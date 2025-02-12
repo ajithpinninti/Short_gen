@@ -180,7 +180,6 @@ def create_subtitles(aligned_data, sub_position, max_line_width=1000):
                         radius=20,
                         method='caption'
                     )
-                    print("normal ")
                 word_clips.append(clip)
 
             # --- Arrange the word clips into one or more lines ---

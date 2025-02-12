@@ -5,7 +5,11 @@ from moviepy.video.VideoClip import ImageClip, TextClip
 from moviepy.video.compositing.CompositeVideoClip import CompositeVideoClip
 from moviepy.audio.io.AudioFileClip import AudioFileClip
 from moviepy.video.compositing.CompositeVideoClip import concatenate_videoclips
-from subtitles import create_subtitles
+# from subtitles import create_subtitles
+# from subs import create_subtitles
+from subso1 import create_subtitles
+# from subtitle import create_subtitles
+
 import os
 import subprocess
 
