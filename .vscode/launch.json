@@ -9,12 +9,20 @@
     "console": "integratedTerminal",
     "justMyCode": false,
     "args": [
-        "--images", "C:/Users/ajitp/OneDrive/Documents/Youtube/eecho tales/shorts/Newest/Love of King Shantanu/images",
-        "--script", "C:/Users/ajitp/OneDrive/Documents/Youtube/eecho tales/shorts/Newest/Love of King Shantanu/script.txt",
-        "--audio",  "C:/Users/ajitp/OneDrive/Documents/Youtube/eecho tales/shorts/Newest/Love of King Shantanu/audio/script.mp3",
-        "--output", "C:/Users/ajitp/OneDrive/Documents/Youtube/eecho tales/shorts/Newest/Love of King Shantanu/final_video.mp4",
-        "--sub_pos", "center",
-        "--pbspeed", "1.25"
+        // "--images", "C:/Users/ajitp/OneDrive/Documents/Youtube/eecho tales/shorts/Newest/ghatotkacha/images",
+        // "--script", "C:/Users/ajitp/OneDrive/Documents/Youtube/eecho tales/shorts/Newest/ghatotkacha/script.txt",
+        // "--audio",  "C:/Users/ajitp/OneDrive/Documents/Youtube/eecho tales/shorts/Newest/ghatotkacha/audio/script.mp3",
+        // "--output", "C:/Users/ajitp/OneDrive/Documents/Youtube/eecho tales/shorts/Newest/ghatotkacha/final_video.mp4",
+        // "--sub_pos", "center",
+        // "--pbspeed", "1.25",
+        // "--train","0",  // 0 for using cached audio processing, 1 for reprocessing audio
+
+        "--input", "C:/Users/ajitp/OneDrive/Documents/Youtube/eecho tales/shorts/Newest/The Curse of Gandhari",
+        "--output","C:/Users/ajitp/OneDrive/Documents/Youtube/eecho tales/shorts/Newest/The Curse of Gandhari/final_video.mp4",
+        "--sub_pos", "600",
+        "--pbspeed", "1.25",
+        "--train","0"
+
     ]
 }
         // {

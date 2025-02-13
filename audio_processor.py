@@ -78,6 +78,7 @@ def align_script_with_audio(script_path, audio_segments):
 
     # checking the number of audio_words and script_lines words
     if ( len(audio_words) == len( script['script_all_words']) ):
+        print("#########detected audio and script matched#########")
         #iterate through every segment word and replace with script word
         word_ind = 0
         # audio_segments
