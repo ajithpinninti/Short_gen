@@ -49,11 +49,36 @@ def create_image_clips(image_dir, aligned_data):
     return concatenate_videoclips(clips, method="chain")#"chain")
 
 
-def process_video(image_dir, script_path, audio_data, output_path, sub_position,playback_speed):
+def process_video(image_dir, script_path, audio_data, output_path, sub_position, playback_speed, background_audio_path=None):
     """Main video processing function
     playback_speed: Speedup factor for the final video 0.0 to 2.0
+    sub_position: Float value between 0-100 representing vertical position as percentage
     """
-    sub_position = int(sub_position)
+    # Clamp sub_position to valid range (0-100)
+    sub_position = max(0, min(100, float(sub_position)))
+    
+    # Get video dimensions from first image
+    first_image = sorted([os.path.join(image_dir, f) for f in os.listdir(image_dir)])[0]
+    video_clip = ImageClip(first_image)
+    video_height = video_clip.size[1]
+    
+    # Create subtitles first to get their height
+    temp_subtitles = create_subtitles(audio_data['aligned_data'], 0)  # temporary position
+    if temp_subtitles:
+        # Get maximum height among all subtitle clips
+        subtitle_height = max(clip.size[1] for clip in temp_subtitles)
+        
+        # Calculate safe position that won't go off-screen
+        max_y_position = video_height - subtitle_height - 20  # 20px safety margin
+        
+        # Convert percentage to actual pixel position with bounds checking
+        sub_position_pixels = int((sub_position / 100) * max_y_position)
+    else:
+        sub_position_pixels = 0
+    
+    # Create actual subtitles with correct position
+    subtitles = create_subtitles(audio_data['aligned_data'], sub_position_pixels)
+    
     print(playback_speed, "\n\n\n")
     temp_audio = "temp/speedup_audio.mp3" # Temporary audio file for speedup
     if os.path.exists(temp_audio):
@@ -63,7 +88,6 @@ def process_video(image_dir, script_path, audio_data, output_path, sub_position,
     
     video_clip = create_image_clips(image_dir, audio_data['aligned_data'])
     # video_clip.preview(fps=24)
-    subtitles = create_subtitles(audio_data['aligned_data'], sub_position)
     
     final_video = CompositeVideoClip([video_clip] + subtitles)
     # final_video.preview(fps=24)

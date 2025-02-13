@@ -324,7 +324,7 @@ def build_page_clip(
 
 def create_subtitles(
     aligned_data,
-    sub_position = 'bottom',
+    sub_position = 0,
     max_line_width=400,
     max_lines_per_screen=3,
 
@@ -360,6 +360,7 @@ def create_subtitles(
     'paragraph' background). Meanwhile, each word can still have a highlight
     background that appears only during [word.start, word.end].
     """
+    
     subtitle_clips = []
 
     for segment in aligned_data:
