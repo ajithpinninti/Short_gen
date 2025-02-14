@@ -47,7 +47,7 @@ def validate_inputs(input_dir):
 
     if backauido_dir is None:
         print("No background audio file found")
-        return None
+        # return None
 
     audio_dir_file = None
     for f in os.listdir(audio_dir):

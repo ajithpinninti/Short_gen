@@ -95,7 +95,7 @@ def process_video(image_dir, script_path, audio_data, output_path, sub_position,
     background_audio_path = audio_data['background_music_path']
 
     # Prepare background audio if provided
-    if os.path.exists(background_audio_path):
+    if background_audio_path is not None and os.path.exists(background_audio_path):
         print("background audio path exists")
         background_audio = AudioFileClip(background_audio_path)
 

@@ -71,7 +71,7 @@ def align_script_with_audio(script_path, audio_segments):
     script["script_all_words"] = []
     for text in script_lines:
         # text = re.sub(r'[^a-zA-Z\s]', '', text) #removing all special characters
-        script_words = re.findall(r"\b[\w]+(?:'[\w]+)?\b", text)
+        script_words = re.findall(r"\b[\w]+(?:['’][\w]+)?\b", text)
         script["script_all_words"] += script_words
         script["script_line_words"].append(script_words)
         # todo: change the text in every word object in segment ( later)
