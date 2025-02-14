@@ -2,7 +2,7 @@
 # video_processor.py (Updated for MoviePy 2.1.1)
 #############################
 from moviepy.video.VideoClip import ImageClip, TextClip
-from moviepy.video.compositing.CompositeVideoClip import CompositeVideoClip
+from moviepy.video.compositing.CompositeVideoClip import CompositeVideoClip, CompositeAudioClip
 from moviepy.audio.io.AudioFileClip import AudioFileClip
 from moviepy.video.compositing.CompositeVideoClip import concatenate_videoclips
 from subtitles import create_subtitles
@@ -48,58 +48,73 @@ def create_image_clips(image_dir, aligned_data):
     
     return concatenate_videoclips(clips, method="chain")#"chain")
 
-
-def process_video(image_dir, script_path, audio_data, output_path, sub_position, playback_speed, background_audio_path=None):
+def process_video(image_dir, script_path, audio_data, output_path, sub_position, playback_speed, background_volume=0.3):
     """Main video processing function
     playback_speed: Speedup factor for the final video 0.0 to 2.0
     sub_position: Float value between 0-100 representing vertical position as percentage
+    background_volume: Float value between 0-1 representing the volume of the background audio
     """
     # Clamp sub_position to valid range (0-100)
     sub_position = max(0, min(100, float(sub_position)))
     
-    # Get video dimensions from first image
-    first_image = sorted([os.path.join(image_dir, f) for f in os.listdir(image_dir)])[0]
-    video_clip = ImageClip(first_image)
+    # Get video dimensions from the first image (to determine subtitle positions, etc.)
+    first_image_path = sorted([os.path.join(image_dir, f) for f in os.listdir(image_dir)])[0]
+    video_clip = ImageClip(first_image_path)
     video_height = video_clip.size[1]
     
-    # Create subtitles first to get their height
-    temp_subtitles = create_subtitles(audio_data['aligned_data'], 0)  # temporary position
-    if temp_subtitles:
-        # Get maximum height among all subtitle clips
-        subtitle_height = max(clip.size[1] for clip in temp_subtitles)
-        
-        # Calculate safe position that won't go off-screen
-        max_y_position = video_height - subtitle_height - 20  # 20px safety margin
-        
-        # Convert percentage to actual pixel position with bounds checking
-        sub_position_pixels = int((sub_position / 100) * max_y_position)
-    else:
-        sub_position_pixels = 0
-    
     # Create actual subtitles with correct position
-    subtitles = create_subtitles(audio_data['aligned_data'], sub_position_pixels)
+    subtitles = create_subtitles(audio_data['aligned_data'], video_height, sub_position)
     
-    print(playback_speed, "\n\n\n")
-    temp_audio = "temp/speedup_audio.mp3" # Temporary audio file for speedup
+    # Prepare temp audio file for speed-adjusted audio
+    temp_audio = "temp/speedup_audio.mp3"
     if os.path.exists(temp_audio):
         os.remove(temp_audio)
     
+    # Ensure output directories exist
     os.makedirs(os.path.dirname(output_path), exist_ok=True)
     
+    # Build the main clip from all images
     video_clip = create_image_clips(image_dir, audio_data['aligned_data'])
-    # video_clip.preview(fps=24)
-    
+
+    # Combine subtitles over the video
     final_video = CompositeVideoClip([video_clip] + subtitles)
-    # final_video.preview(fps=24)
-    
-    
+
+    # Step 1: Generate speed-adjusted main audio
     speedup_command = [
-        "ffmpeg", "-i", audio_data['raw_audio_path'], "-filter:a", f"atempo={playback_speed}", "-vn", temp_audio
+        "ffmpeg", "-i", audio_data['raw_audio_path'], 
+        "-filter:a", f"atempo={playback_speed}", 
+        "-vn", temp_audio
     ]
     subprocess.run(speedup_command, check=True)
-    final_video = final_video.with_speed_scaled(playback_speed)
-    final_video = final_video.with_audio(AudioFileClip(temp_audio))
 
+    # Step 2: Adjust the video speed (visual only)
+    final_video = final_video.with_speed_scaled(playback_speed)
+
+    # Step 3: Now load the speed-adjusted (foreground) audio
+    foreground_audio = AudioFileClip(temp_audio)
+    background_audio_path = audio_data['background_music_path']
+
+    # Prepare background audio if provided
+    if os.path.exists(background_audio_path):
+        print("background audio path exists")
+        background_audio = AudioFileClip(background_audio_path)
+
+        # Trim or loop the background audio to match final video duration
+        # (Here we do a simple trim, but you can do more advanced logic if needed)
+        final_duration = final_video.duration
+        background_audio = background_audio.subclipped(0, min(background_audio.duration, final_duration))
+        # Optionally adjust background volume. E.g., 0.3 (30% volume)
+        background_audio = background_audio.with_volume_scaled(background_volume)
+        # Step 4: Mix foreground + background
+        mixed_audio = CompositeAudioClip([foreground_audio, background_audio])
+    else:
+        # No background audio, just use the foreground audio
+        mixed_audio = foreground_audio
+
+    # Attach the mixed audio to the final video
+    final_video = final_video.with_audio(mixed_audio)
+
+    # Step 5: Write the output video
     final_video.write_videofile(
         output_path,
         codec='libx264',
@@ -108,6 +123,9 @@ def process_video(image_dir, script_path, audio_data, output_path, sub_position,
         threads=4,
         preset='fast'
     )
-    os.remove(temp_audio) # Remove temporary audio file
+
+    # Cleanup
+    if os.path.exists(temp_audio):
+        os.remove(temp_audio)
 
 

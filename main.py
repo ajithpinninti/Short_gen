@@ -24,9 +24,9 @@ def main():
     if status is None:
         raise ValueError("Invalid input files")
     else:
-        imgs_dir, audio_dir, script_dir = status
+        imgs_dir, foreaudio_dir, backauido_dir, script_dir = status
 
-    audio_duration = check_audio_duration(audio_dir)
+    audio_duration = check_audio_duration(foreaudio_dir)
     if audio_duration > 40:
         print("Warning: Audio exceeds 40 seconds - platform limits may apply")
     
@@ -42,9 +42,9 @@ def main():
     elif num_images > num_lines:
         raise ValueError(f"Warning: More images ({num_images}) than script lines ({num_lines}). Extra images will be ignored.")
 
-    processed_audio = process_audio(audio_dir, script_dir, args.train)
+    processed_audio = process_audio(foreaudio_dir, script_dir, args.train, backauido_dir)
     process_video(imgs_dir, script_dir, processed_audio,
-                 args.output, args.sub_pos,args.pbspeed)
+                 args.output, args.sub_pos,args.pbspeed, background_volume=0.3)
 
 
 if __name__ == "__main__":

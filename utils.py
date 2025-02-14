@@ -27,6 +27,28 @@ def validate_inputs(input_dir):
         print("Audio directory not found")
         return None
     
+    # Check for voiceover and background audio files
+    foreaudio_dir = None
+    backauido_dir = None
+    
+    for f in os.listdir(audio_dir):
+        file_path = os.path.join(audio_dir, f)
+        if os.path.isfile(file_path) and os.path.splitext(f)[1].lower() in allowed_audio_formats:
+            # Check filename for voiceover or background
+            filename = os.path.splitext(f)[0].lower()
+            if "voiceover" in filename or "voice" in filename:
+                foreaudio_dir = file_path
+            elif "background" in filename or "bg" in filename:
+                backauido_dir = file_path
+    
+    if foreaudio_dir is None:
+        print("No voiceover audio file found")
+        return None
+
+    if backauido_dir is None:
+        print("No background audio file found")
+        return None
+
     audio_dir_file = None
     for f in os.listdir(audio_dir):
         file_path = os.path.join(audio_dir, f)
@@ -37,7 +59,7 @@ def validate_inputs(input_dir):
         print("No valid audio file found in the audio directory")
         return None
 
-    return [image_dir, audio_dir_file, script_path]
+    return [image_dir, foreaudio_dir, backauido_dir, script_path]
 
 def check_audio_duration(audio_path):
     """Check audio duration and warn if too long"""

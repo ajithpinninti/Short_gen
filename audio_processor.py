@@ -130,13 +130,21 @@ def align_script_with_audio(script_path, audio_segments):
     
     return aligned_data
 
-def process_audio(audio_path, script_path, train):
+def process_audio(audio_path, script_path, train, background_music_path=None):
     """Main audio processing function"""
     print("Processing audio...")
     audio_segments = transcribe_with_timestamps(audio_path, train)
     aligned_data = align_script_with_audio(script_path, audio_segments)
     print("audio process is completed")
-    return {
+    
+    result = {
         'raw_audio_path': audio_path,
         'aligned_data': aligned_data
     }
+    
+    if background_music_path is not None:
+        result['background_music_path'] = background_music_path
+    else:
+        result['background_music_path'] = None
+    
+    return result
